@@ -1,9 +1,21 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUserStart } from "../slice/auth";
 import { Input } from "../ui/Input";
 
 export const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+  const {isLoading} = useSelector((state) => state.auth);
+
+  const loginHandler = (e) => {
+    e.preventDefault()
+    dispatch(loginUserStart())
+  }
+
+  console.log(isLoading);
+
   return (
     <div className="flex items-center justify-center h-[80vh]">
       <div className="border w-96 p-6 rounded">
@@ -20,9 +32,11 @@ export const Login = () => {
           <div className="flex items-center justify-between">
             <button
               className="bg-zinc-700 hover:bg-zinc-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={loginHandler}
               type="button"
+              disabled={isLoading}
             >
-              Login
+              {isLoading ? 'Loading...' : 'Login'}
             </button>
             <a
               className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
